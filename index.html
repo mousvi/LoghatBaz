@@ -505,7 +505,7 @@ async function bootCurriculum(force){
   }catch(e){
     curriculumReady=false;
     $('map').innerHTML='<div style="padding:20px;text-align:center;line-height:2;color:#ffd66f">دریافت بانک ۶۰۰۰ لغتی انجام نشد.<br><small style="color:var(--mut)">'+esc(e.message||e)+'</small><br><button class="btn main" id="retryCurriculum">تلاش دوباره</button></div>';
-    $('retryCurriculum').onclick=()=>bootCurriculum(true);
+    $('retryCurriculum').onclick=()=>bootCurriculum(false);
   }
 }
 bootCurriculum();
