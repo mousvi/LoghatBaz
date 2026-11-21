@@ -270,6 +270,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 /* ۴۰۰ مرحله؛ هر مرحله دقیقاً ۱۵ واژهٔ یکتا از یک خانوادهٔ معنایی */
 function levelIds(L){return LEVELS[L]?LEVELS[L].ids:[]}
 const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[c]));
 let curriculumReady=false;
 /* ---------- state ---------- */
 const KEY='lughatbaz-v4';
@@ -313,7 +314,7 @@ function renderHome(){
   let h='<h4>مسیر یادگیری تو</h4><div class="grid">';
   for(let L=0;L<TOTAL;L++){
     const d=S.done[L],lock=L>top||!ownsStage(L),ico=LEVELS[L].emoji;
-    h+=`<button class="st glass ${lock?'lock':''} ${d?'done':''} ${L===top?'cur':''}" data-l="${L}" id="lv${L}"><span class="e">${lock?'🔒':ico}</span><span class="n">مرحلهٔ ${fa(L+1)}</span><span class="topic">${LEVELS[L].title}</span><span class="s">${d?'⭐'.repeat(d):(L===top?'▶':'')}</span></button>`;
+    h+=`<button class="st glass ${lock?'lock':''} ${d?'done':''} ${L===top?'cur':''}" data-l="${L}" id="lv${L}"><span class="e">${lock?'🔒':ico}</span><span class="n">مرحلهٔ ${fa(L+1)}</span><span class="topic">${esc(LEVELS[L].title)}</span><span class="s">${d?'⭐'.repeat(d):(L===top?'▶':'')}</span></button>`;
   }
   $('map').innerHTML=h+'</div>';
 }
@@ -503,7 +504,7 @@ async function bootCurriculum(force){
     setTimeout(()=>{const c=$('lv'+unlocked());if(c&&unlocked()>7)c.scrollIntoView({block:'center'})},200);
   }catch(e){
     curriculumReady=false;
-    $('map').innerHTML='<div style="padding:20px;text-align:center;line-height:2;color:#ffd66f">دریافت بانک ۶۰۰۰ لغتی انجام نشد.<br><small style="color:var(--mut)">'+String(e.message||e).replace(/[<>&]/g,' ')+'</small><br><button class="btn main" id="retryCurriculum">تلاش دوباره</button></div>';
+    $('map').innerHTML='<div style="padding:20px;text-align:center;line-height:2;color:#ffd66f">دریافت بانک ۶۰۰۰ لغتی انجام نشد.<br><small style="color:var(--mut)">'+esc(e.message||e)+'</small><br><button class="btn main" id="retryCurriculum">تلاش دوباره</button></div>';
     $('retryCurriculum').onclick=()=>bootCurriculum(true);
   }
 }
