@@ -346,7 +346,7 @@ function startLevel(L){
   if(L<0||L>=TOTAL)return;
   if(L>unlocked()||!ownsStage(L)){showLockedMessage(L);return;}
   G={L,r:0,errors:0,matched:new Set(),sel:{en:null,fa:null},lock:false,combo:0,gained:0,ids:levelIds(L)};
-  show('game');$('gTitle').textContent='مرحلهٔ '+fa(L+1)+' از '+fa(TOTAL)+' · '+fa(PER)+' لغت';renderRound();
+  show('game');$('gTitle').textContent='مرحلهٔ '+fa(L+1)+' از '+fa(TOTAL);renderRound();
 }
 function bar(){$('gBar').style.width=(G.matched.size/PER*100)+'%'}
 function renderRound(){
