@@ -48,7 +48,7 @@ button{font-family:inherit;color:inherit;border:0;cursor:pointer;touch-action:ma
 .st{aspect-ratio:1;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;font-size:12px}
 .st .e{font-size:26px}
 .st .n{font-size:11px;color:var(--mut)}
-.st .s{font-size:10px;letter-spacing:1px;min-height:12px}
+.st .s{font-size:10px;letter-spacing:1px;min-height:12px}.st .topic{font-size:9px;color:var(--mut);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 3px}
 .st.lock{opacity:.35;pointer-events:none;filter:grayscale(.6)}
 .st.cur{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,211,107,.5),0 0 26px rgba(255,211,107,.35)}
 .st.done{background:linear-gradient(145deg,rgba(61,220,151,.28),rgba(255,255,255,.05))}
@@ -197,7 +197,7 @@ setTimeout(function(){var m=document.getElementById('map');if(m&&!m.children.len
     </div>
     <div class="hero glass">
       <div class="ring" id="ring"><div id="ringTx">۰٪</div></div>
-      <div><h3 id="heroT">شروع یادگیری</h3><p id="heroP">۳۰۰ لغت، ۴۰۰ مرحله، هر مرحله ۲۰ لغت.</p><p id="welcomeName" style="color:var(--gold);font-weight:800;margin-top:5px"></p></div>
+      <div><h3 id="heroT">شروع یادگیری</h3><p id="heroP">۶۰۰۰ لغت، ۴۰۰ مرحله، هر مرحله ۱۵ لغت.</p><p id="welcomeName" style="color:var(--gold);font-weight:800;margin-top:5px"></p></div>
     </div>
     <button class="play" id="playBtn">▶ ادامهٔ بازی</button>
 
@@ -256,45 +256,24 @@ setTimeout(function(){var m=document.getElementById('map');if(m&&!m.children.len
   </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="curriculum.js"></script>
 <script>
 /* [انگلیسی، فارسی، تلفظ، ایموجی] */
-const W=[
-["nice","خوب","نایس","😊"],["sad","غمگین","سَد","😢"],["smart","باهوش","اِسمارت","🧠"],["best","بهترین","بِست","🏆"],["cute","بانمک","کیوت","🥰"],["happy","خوشحال","هَپی","😄"],["big","بزرگ","بیگ","🦣"],["small","کوچک","اِسمال","🐜"],["hot","داغ","هات","🔥"],["cold","سرد","کُولد","🥶"],["fast","سریع","فَست","⚡"],["slow","آهسته","اِسلو","🐌"],["new","جدید","نیو","✨"],["old","قدیمی","اُولد","👴"],["easy","آسان","ایزی","✅"],
-["apple","سیب","اَپِل","🍎"],["bread","نان","بِرِد","🍞"],["water","آب","واتِر","💧"],["milk","شیر","میلک","🥛"],["book","کتاب","بوک","📖"],["pen","خودکار","پِن","🖊️"],["table","میز","تِیبِل","🍽️"],["chair","صندلی","چِر","🪑"],["door","در","دور","🚪"],["window","پنجره","ویندو","🪟"],["house","خانه","هاوس","🏠"],["car","ماشین","کار","🚗"],["street","خیابان","اِستریت","🛣️"],["school","مدرسه","اِسکول","🏫"],["friend","دوست","فِرِند","🧑‍🤝‍🧑"],
-["go","رفتن","گُو","🚦"],["come","آمدن","کام","👋"],["eat","خوردن","ایت","😋"],["drink","نوشیدن","دِرینک","🥤"],["read","خواندن","رید","📚"],["write","نوشتن","رایت","✍️"],["speak","صحبت کردن","اِسپیک","🗣️"],["listen","گوش دادن","لیسِن","🎧"],["see","دیدن","سی","👀"],["sleep","خوابیدن","اِسلیپ","😴"],["work","کار کردن","وِرک","💼"],["play","بازی کردن","پِلِی","🎮"],["learn","یاد گرفتن","لِرن","📝"],["help","کمک کردن","هِلپ","🛟"],["open","باز کردن","اُوپِن","📂"],
-["mother","مادر","ماذِر","👩"],["father","پدر","فاذِر","👨"],["sister","خواهر","سیستِر","👭"],["brother","برادر","بِراذِر","👬"],["son","پسر خانواده","سان","👨‍👦"],["daughter","دختر خانواده","داتِر","👩‍👧"],["baby","نوزاد","بِیبی","👶"],["child","کودک","چایلد","🧒"],["family","خانواده","فَمیلی","👨‍👩‍👧‍👦"],["man","مرد","مَن","🧔"],["woman","زن","وومِن","👩‍🦰"],["boy","پسر","بوی","👦"],["girl","دختر","گِرل","👧"],["husband","شوهر","هازبِند","🤵"],["wife","همسر زن","وایف","👰"],
-["rice","برنج","رایس","🍚"],["meat","گوشت","میت","🥩"],["fish","ماهی","فیش","🐟"],["egg","تخم‌مرغ","اِگ","🥚"],["cheese","پنیر","چیز","🧀"],["butter","کره","باتِر","🧈"],["salt","نمک","سالت","🧂"],["sugar","شکر","شوگِر","🍬"],["tea","چای","تی","🍵"],["coffee","قهوه","کافی","☕"],["juice","آب‌میوه","جوس","🧃"],["soup","سوپ","سوپ","🍲"],["potato","سیب‌زمینی","پِتِیتُو","🥔"],["tomato","گوجه‌فرنگی","تِمِیتُو","🍅"],["onion","پیاز","آنیِن","🧅"],
-["head","سر","هِد","👤"],["face","صورت","فِیس","🙂"],["eye","چشم","آی","👁️"],["ear","گوش","ایر","👂"],["nose","بینی","نُوز","👃"],["mouth","دهان","ماوث","👄"],["tooth","دندان","توث","🦷"],["hand","دست","هَند","✋"],["arm","بازو","آرم","💪"],["leg","پا","لِگ","🦵"],["foot","کف پا","فوت","🦶"],["finger","انگشت دست","فینگِر","☝️"],["hair","مو","هِر","💇"],["heart","قلب","هارت","❤️"],["back","پشت","بَک","🔙"],
-["day","روز","دِی","🌞"],["night","شب","نایت","🌃"],["morning","صبح","مورنینگ","🌅"],["evening","عصر","ایونینگ","🌇"],["today","امروز","تودِی","📅"],["tomorrow","فردا","تومارُو","⏭️"],["yesterday","دیروز","یِستِردِی","⏮️"],["week","هفته","ویک","🗓️"],["month","ماه تقویمی","مانث","📆"],["year","سال","ییر","🎆"],["hour","ساعت زمانی","آوِر","⏰"],["minute","دقیقه","مینیت","⏱️"],["time","زمان","تایم","⌛"],["now","اکنون","ناو","📍"],["later","بعداً","لِیتِر","🕒"],
-["red","قرمز","رِد","🔴"],["blue","آبی","بلو","🔵"],["green","سبز","گرین","🟢"],["yellow","زرد","یِلو","🟡"],["black","سیاه","بِلَک","⚫"],["white","سفید","وایت","⚪"],["brown","قهوه‌ای","بِراون","🟤"],["pink","صورتی","پینک","🌸"],["purple","بنفش","پِرپِل","🟣"],["orange","نارنجی","اورِنج","🟠"],["one","یک","وان","1️⃣"],["two","دو","تو","2️⃣"],["three","سه","ثری","3️⃣"],["four","چهار","فور","4️⃣"],["five","پنج","فایو","5️⃣"],
-["city","شهر","سیتی","🏙️"],["village","روستا","ویلیج","🏡"],["country","کشور","کانتری","🌍"],["shop","مغازه","شاپ","🏪"],["market","بازار","مارکِت","🛒"],["hospital","بیمارستان","هاسپیتِل","🏥"],["bank","بانک","بَنک","🏦"],["park","پارک","پارک","🛝"],["station","ایستگاه","اِستِیشِن","🚉"],["airport","فرودگاه","اِرپورت","✈️"],["hotel","هتل","هُوتِل","🏨"],["restaurant","رستوران","رِستِرانت","🍝"],["bridge","پل","بِریج","🌉"],["road","جاده","رُود","🛤️"],["garden","باغ","گاردِن","🌷"],
-["engine","موتور","اِنجین","⚙️"],["brake","ترمز","بِرِیک","🛑"],["tire","لاستیک","تایِر","🛞"],["wheel","چرخ","ویل","🎡"],["battery","باتری","بَتِری","🔋"],["fuel","سوخت","فیول","⛽"],["oil","روغن","اُیل","🛢️"],["speed","سرعت","اِسپید","🏎️"],["safety","ایمنی","سِیفتی","🦺"],["quality","کیفیت","کوالِتی","💎"],["defect","عیب","دیفِکت","⚠️"],["inspection","بازرسی","اینسپِکشِن","🔍"],["repair","تعمیر","ریپِر","🔧"],["scratch","خراش","اِسکِرَچ","🩹"],["leak","نشتی","لیک","💦"],
-["room","اتاق","روم","🖼️"],["kitchen","آشپزخانه","کیچِن","👨‍🍳"],["bathroom","حمام","بَث‌روم","🛁"],["bedroom","اتاق خواب","بِدروم","🛌"],["floor","کف","فِلور","🟫"],["wall","دیوار","وال","🧱"],["ceiling","سقف داخلی","سیلینگ","⬆️"],["roof","سقف بیرونی","روف","🏘️"],["bed","تخت","بِد","🛏️"],["sofa","مبل","سُوفا","🛋️"],["lamp","چراغ","لَمپ","💡"],["mirror","آینه","میرِر","🪞"],["carpet","فرش","کارپِت","🏵️"],["curtain","پرده","کِرتِن","🎭"],["shelf","قفسه","شِلف","🗄️"],
-["plate","بشقاب","پِلِیت","🍛"],["bowl","کاسه","بُول","🥣"],["cup","فنجان","کاپ","🥃"],["glass","لیوان","گِلَس","🍷"],["spoon","قاشق","اِسپون","🥄"],["fork","چنگال","فورک","🍴"],["knife","چاقو","نایف","🔪"],["bottle","بطری","باتِل","🍾"],["pan","ماهیتابه","پَن","🍳"],["pot","قابلمه","پات","🫕"],["oven","فر","آوِن","🥧"],["stove","اجاق","اِستُوو","♨️"],["fridge","یخچال","فِریج","🧊"],["sink","سینک","سینک","🚰"],["kettle","کتری","کِتِل","🫖"],
-["shirt","پیراهن","شِرت","👕"],["pants","شلوار","پَنتس","👖"],["dress","لباس زنانه","دِرِس","👗"],["skirt","دامن","اِسکِرت","🎀"],["coat","پالتو","کُوت","🧥"],["jacket","کاپشن","جَکِت","🥼"],["sweater","پلیور","اِسوِتِر","🧶"],["socks","جوراب","ساکس","🧦"],["shoes","کفش","شوز","👟"],["boots","چکمه","بوتس","🥾"],["hat","کلاه","هَت","🎩"],["scarf","شال","اِسکارف","🧣"],["gloves","دستکش","گِلاوز","🧤"],["belt","کمربند","بِلت","🎗️"],["pocket","جیب","پاکِت","🪙"],
-["sun","خورشید","سان","☀️"],["moon","ماه آسمان","مون","🌕"],["star","ستاره","اِستار","⭐"],["sky","آسمان","اِسکای","🌌"],["cloud","ابر","کِلاود","☁️"],["rain","باران","رِین","🌧️"],["snow","برف","اِسنو","❄️"],["wind","باد","ویند","💨"],["storm","طوفان","اِستورم","⛈️"],["weather","آب‌وهوا","وِذِر","🌦️"],["tree","درخت","تری","🌲"],["flower","گل","فِلاوِر","🌼"],["grass","چمن","گِرَس","🌱"],["forest","جنگل","فارِست","🌳"],["river","رودخانه","ریوِر","🏞️"],
-["dog","سگ","داگ","🐕"],["cat","گربه","کَت","🐈"],["bird","پرنده","بِرد","🐦"],["horse","اسب","هورس","🐎"],["cow","گاو","کاو","🐄"],["sheep","گوسفند","شیپ","🐑"],["goat","بز","گُوت","🐐"],["chicken","مرغ","چیکِن","🐓"],["duck","اردک","داک","🦆"],["rabbit","خرگوش","رَبیت","🐇"],["lion","شیر جنگل","لایِن","🦁"],["tiger","ببر","تایگِر","🐅"],["bear","خرس","بِر","🐻"],["elephant","فیل","اِلِفِنت","🐘"],["monkey","میمون","مانکی","🐒"],
-["banana","موز","بِنَنا","🍌"],["grape","انگور","گِرِیپ","🍇"],["lemon","لیمو","لِمِن","🍋"],["peach","هلو","پیچ","🍑"],["pear","گلابی","پِر","🍐"],["cherry","گیلاس","چِری","🍒"],["strawberry","توت‌فرنگی","اِسترابِری","🍓"],["watermelon","هندوانه","واتِرمِلِن","🍉"],["melon","خربزه","مِلِن","🍈"],["carrot","هویج","کَرِت","🥕"],["cucumber","خیار","کیوکامبِر","🥒"],["lettuce","کاهو","لِتِس","🥬"],["cabbage","کلم","کَبیج","🥦"],["pepper","فلفل","پِپِر","🌶️"],["garlic","سیر","گارلیک","🧄"],
-["angry","عصبانی","اَنگری","😠"],["afraid","ترسیده","اِفِرِید","😨"],["tired","خسته","تایِرد","😫"],["hungry","گرسنه","هانگری","🍔"],["thirsty","تشنه","ثِرستی","🏜️"],["sick","بیمار","سیک","🤒"],["healthy","سالم","هِلثی","🥗"],["excited","هیجان‌زده","اِکسایتِد","🤩"],["worried","نگران","وِرید","😟"],["calm","آرام","کام","😌"],["proud","مفتخر","پِراود","🦚"],["lonely","تنها","لُونلی","🧍"],["bored","بی‌حوصله","بورد","🥱"],["surprised","شگفت‌زده","سِرپِرایزد","😲"],["comfortable","راحت","کامفتِربِل","🧘"],
-["walk","راه رفتن","واک","🚶"],["run","دویدن","ران","🏃"],["sit","نشستن","سیت","💺"],["stand","ایستادن","اِستَند","🧍‍♂️"],["jump","پریدن","جامپ","🤸"],["swim","شنا کردن","اِسویم","🏊"],["drive","رانندگی کردن","دِرایو","🚘"],["ride","سوار شدن","راید","🚴"],["fly","پرواز کردن","فِلای","🕊️"],["climb","بالا رفتن","کِلایم","🧗"],["fall","افتادن","فال","🤕"],["turn","چرخیدن","تِرن","🔄"],["move","حرکت کردن","موو","➡️"],["stop","توقف کردن","اِستاپ","⛔"],["travel","سفر کردن","تِرَوِل","🧳"],
-["wash","شستن","واش","🧼"],["clean","تمیز کردن","کلین","🧹"],["cook","آشپزی کردن","کوک","🥘"],["cut","بریدن","کات","✂️"],["close","بستن","کِلُوز","🔒"],["buy","خریدن","بای","🛍️"],["sell","فروختن","سِل","🏷️"],["pay","پرداخت کردن","پِی","💳"],["bring","آوردن","بِرینگ","📦"],["take","بردن","تِیک","🤲"],["give","دادن","گیو","🎁"],["send","فرستادن","سِند","📤"],["wait","منتظر ماندن","وِیت","⏳"],["meet","ملاقات کردن","میت","🤝"],["call","تماس گرفتن","کال","📞"],
-["think","فکر کردن","ثینک","🤔"],["know","دانستن","نُو","🎓"],["understand","فهمیدن","آندِراِستَند","👌"],["remember","به یاد آوردن","ریمِمبِر","🗂️"],["forget","فراموش کردن","فِرگِت","🫥"],["believe","باور کردن","بیلیو","🙏"],["want","خواستن","وانت","🙋"],["need","نیاز داشتن","نید","❗"],["like","دوست داشتن","لایک","👍"],["love","عاشق بودن","لاو","😍"],["hate","متنفر بودن","هِیت","💔"],["hope","امید داشتن","هُوپ","🌈"],["choose","انتخاب کردن","چوز","☑️"],["decide","تصمیم گرفتن","دیساید","⚖️"],["try","تلاش کردن","تِرای","🎯"]
-];
+let W=[];
+let LEVELS=[];
 const THEMES=[["صفت‌ها","🎨"],["روزمره","🏠"],["فعل‌ها","🏃"],["خانواده","👨‍👩‍👧"],["خوراکی‌ها","🍞"],["بدن","🖐️"],["زمان","⏰"],["رنگ و عدد","🌈"],["مکان‌ها","🏙️"],["خودرو و کیفیت","🚗"],["خانه","🛋️"],["آشپزخانه","🍳"],["لباس","👕"],["طبیعت","🌳"],["حیوانات","🦁"],["میوه و سبزی","🍉"],["احساسات","😊"],["حرکت","🏊"],["کارهای روزانه","🧼"],["فکر و یادگیری","🧠"]];
-const TOTAL=400,PER=20;
+const TOTAL=400,PER=15;
+const CURRICULUM_VERSION='loghatbaz-6000-v1';
 function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function fa(n){return Number(n).toLocaleString('fa-IR',{useGrouping:false})}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-/* ۴۰۰ مرحله؛ هر مرحله ۲۰ لغت. ۱۵ مرحلهٔ اول هر ۳۰۰ لغت را به ترتیب یاد می‌دهند، بقیه مرور ترکیبی‌اند */
-function levelIds(L){
-  if(L<15)return Array.from({length:PER},(_,k)=>L*PER+k);
-  const r=rng(L*7919+13),a=[...Array(300).keys()];
-  for(let k=0;k<PER;k++){const x=k+Math.floor(r()*(300-k));[a[k],a[x]]=[a[x],a[k]]}
-  return a.slice(0,PER);
-}
+/* ۴۰۰ مرحله؛ هر مرحله دقیقاً ۱۵ واژهٔ یکتا از یک خانوادهٔ معنایی */
+function levelIds(L){return LEVELS[L]?LEVELS[L].ids:[]}
 const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let curriculumReady=false;
 /* ---------- state ---------- */
-const KEY='lughatbaz-v3';
+const KEY='lughatbaz-v4';
 let S={done:{},xp:0,streak:0,last:'',name:'',sound:true,voice:true,vib:true,pron:true,emo:true,size:1,rate:1,theme:0,access50:false,accessAll:false};
 try{const t=JSON.parse(localStorage.getItem(KEY));if(t&&typeof t==='object')S=Object.assign(S,t)}catch(e){}
 if(typeof S.access50!=='boolean')S.access50=false;
@@ -322,6 +301,7 @@ function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clear
 /* ---------- home ---------- */
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))}
 function renderHome(){
+  if(!curriculumReady){$('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--mut)">در حال آماده‌سازی مسیر ۶۰۰۰ لغتی…</p>';return;}
   const top=unlocked(),doneN=Object.keys(S.done).length;
   let stars=0;for(const k in S.done)stars+=S.done[k];
   $('sStars').textContent=fa(stars);$('sXp').textContent=fa(S.xp);$('sStreak').textContent=fa(S.streak);
@@ -329,24 +309,24 @@ function renderHome(){
   $('ring').style.setProperty('--p',pct);$('ringTx').textContent=fa(pct)+'٪';
   $('heroT').textContent=doneN?'آفرین، ادامه بده!':'شروع یادگیری';
   $('welcomeName').textContent=S.name?'خوش اومدی '+S.name+' عزیز! 🌟':'';
-  $('heroP').textContent=fa(doneN)+' مرحله از '+fa(TOTAL)+' کامل شده. ۵۰ مرحلهٔ اول رایگان است؛ هر مرحله '+fa(PER)+' لغت دارد.';
+  $('heroP').textContent=fa(doneN)+' مرحله از '+fa(TOTAL)+' کامل شده؛ مجموعاً ۶۰۰۰ لغت یکتا، هر مرحله دقیقاً ۱۵ لغت.';
   $('playBtn').textContent=(doneN?'▶ ادامه: مرحلهٔ ':'▶ شروع: مرحلهٔ ')+fa(top+1);
   let h='<h4>مسیر یادگیری تو</h4><div class="grid">';
   for(let L=0;L<TOTAL;L++){
-    const d=S.done[L],lock=L>top||!ownsStage(L),ico=W[levelIds(L)[0]][3];
-    h+=`<button class="st glass ${lock?'lock':''} ${d?'done':''} ${L===top?'cur':''}" data-l="${L}" id="lv${L}"><span class="e">${lock?'🔒':ico}</span><span class="n">مرحلهٔ ${fa(L+1)}</span><span class="s">${d?'⭐'.repeat(d):(L===top?'▶':'')}</span></button>`;
+    const d=S.done[L],lock=L>top||!ownsStage(L),ico=LEVELS[L].emoji;
+    h+=`<button class="st glass ${lock?'lock':''} ${d?'done':''} ${L===top?'cur':''}" data-l="${L}" id="lv${L}"><span class="e">${lock?'🔒':ico}</span><span class="n">مرحلهٔ ${fa(L+1)}</span><span class="topic">${esc(LEVELS[L].title)}</span><span class="s">${d?'⭐'.repeat(d):(L===top?'▶':'')}</span></button>`;
   }
   $('map').innerHTML=h+'</div>';
 }
 $('map').addEventListener('click',e=>{const b=e.target.closest('.st');if(b){const L=+b.dataset.l;if(L>unlocked()||!ownsStage(L)){showLockedMessage(L);return;}startLevel(L)}});
 $('playBtn').onclick=()=>{const L=unlocked();if(!ownsStage(L)){showLockedMessage(L);return;}startLevel(L)};
-/* ---------- game: هر مرحله ۴ بخش ۵ جفتی = ۲۰ لغت ---------- */
+/* ---------- game: هر مرحله دقیقاً ۱۵ جفت واژه ---------- */
 let G=null;
 function startLevel(L){
   if(L<0||L>=TOTAL)return;
   if(L>unlocked()||!ownsStage(L)){showLockedMessage(L);return;}
   G={L,r:0,errors:0,matched:new Set(),sel:{en:null,fa:null},lock:false,combo:0,gained:0,ids:levelIds(L)};
-  show('game');$('gTitle').textContent='مرحلهٔ '+fa(L+1)+' از '+fa(TOTAL)+' · '+fa(PER)+' لغت';renderRound();
+  show('game');$('gTitle').textContent='مرحلهٔ '+fa(L+1)+' از '+fa(TOTAL)+' · '+LEVELS[L].title+' · '+fa(PER)+' لغت';renderRound();
 }
 function bar(){$('gBar').style.width=(G.matched.size/PER*100)+'%'}
 function renderRound(){
@@ -436,18 +416,18 @@ async function cloudLoadAndSync(){
   try{
     const profile=await sbClient.from('profiles').select('total_xp,display_name').eq('user_id',cloudUser.id).maybeSingle();
     if(profile.error)throw profile.error;
-    const remote=await sbClient.from('level_progress').select('level_number,stars').eq('user_id',cloudUser.id).order('level_number');
+    const remote=await sbClient.from('curriculum_progress').select('level_number,stars').eq('user_id',cloudUser.id).eq('curriculum_version',CURRICULUM_VERSION).order('level_number');
     if(remote.error)throw remote.error;
     const remoteMap={};(remote.data||[]).forEach(x=>remoteMap[x.level_number-1]=x.stars);
     const localKeys=Object.keys(S.done||{}).map(Number).filter(Number.isInteger).sort((a,b)=>a-b);
     for(const L of localKeys){
       if(remoteMap[L]!==undefined)continue;
       if(L>0 && remoteMap[L-1]===undefined)break;
-      const migrated=await sbClient.rpc('complete_level',{p_level_number:L+1,p_stars:S.done[L]});
+      const migrated=await sbClient.rpc('complete_curriculum_level',{p_curriculum_version:CURRICULUM_VERSION,p_level_number:L+1,p_stars:S.done[L]});
       if(migrated.error){cloudMessage('همگام‌سازی مرحله '+(L+1)+' متوقف شد: '+migrated.error.message);break;}
       remoteMap[L]=S.done[L];
     }
-    const fresh=await sbClient.from('level_progress').select('level_number,stars').eq('user_id',cloudUser.id).order('level_number');
+    const fresh=await sbClient.from('curriculum_progress').select('level_number,stars').eq('user_id',cloudUser.id).eq('curriculum_version',CURRICULUM_VERSION).order('level_number');
     if(fresh.error)throw fresh.error;
     const merged={};(fresh.data||[]).forEach(x=>merged[x.level_number-1]=x.stars);
     S.done=merged;
@@ -502,7 +482,7 @@ $('cloudSignup').onclick=async()=>{
 $('cloudLogout').onclick=async()=>{if(sbClient){const {error}=await sbClient.auth.signOut();cloudMessage(error?error.message:'از حساب خارج شدی.')}};
 async function cloudSaveLevel(levelZeroBased,stars){
   if(!sbClient||!cloudUser)return;
-  const {error}=await sbClient.rpc('complete_level',{p_level_number:levelZeroBased+1,p_stars:stars});
+  const {error}=await sbClient.rpc('complete_curriculum_level',{p_curriculum_version:CURRICULUM_VERSION,p_level_number:levelZeroBased+1,p_stars:stars});
   if(error){cloudMessage('ذخیرهٔ آنلاین انجام نشد: '+error.message);toast('ذخیرهٔ آنلاین ناموفق بود ⚠️');return;}
   const p=await sbClient.from('profiles').select('total_xp').eq('user_id',cloudUser.id).maybeSingle();
   if(!p.error&&p.data){S.xp=p.data.total_xp||S.xp;save();renderHome();}
@@ -510,9 +490,25 @@ async function cloudSaveLevel(levelZeroBased,stars){
 setTimeout(cloudInit,0);
 
 document.addEventListener('contextmenu',e=>e.preventDefault());
-renderHome();
-if(!S.name){$('welcome').classList.add('on')}
-setTimeout(()=>{const c=$('lv'+unlocked());if(c&&unlocked()>7)c.scrollIntoView({block:'center'})},200);
+async function bootCurriculum(force){
+  $('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--mut)">در حال دریافت و بررسی بانک واژگان…</p>';
+  $('playBtn').disabled=true;
+  try{
+    const curriculum=await window.loadLoghatCurriculum(!!force);
+    W=curriculum.words;LEVELS=curriculum.levels;
+    if(W.length!==6000||LEVELS.length!==400||LEVELS.some(x=>x.ids.length!==15))throw new Error('ساختار بانک واژگان معتبر نیست.');
+    curriculumReady=true;
+    $('playBtn').disabled=false;
+    renderHome();
+    if(!S.name)$('welcome').classList.add('on');
+    setTimeout(()=>{const c=$('lv'+unlocked());if(c&&unlocked()>7)c.scrollIntoView({block:'center'})},200);
+  }catch(e){
+    curriculumReady=false;
+    $('map').innerHTML='<div style="padding:20px;text-align:center;line-height:2;color:#ffd66f">دریافت بانک ۶۰۰۰ لغتی انجام نشد.<br><small style="color:var(--mut)">'+esc(e.message||e)+'</small><br><button class="btn main" id="retryCurriculum">تلاش دوباره</button></div>';
+    $('retryCurriculum').onclick=()=>bootCurriculum(false);
+  }
+}
+bootCurriculum();
 </script>
 <script>if("serviceWorker"in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
 </body>
