@@ -25,7 +25,12 @@
       if(seen.has(key))return false;
       seen.add(key);
     }
-    return data.levels.every(s=>Array.isArray(s.ids)&&s.ids.length===15&&s.ids.every(i=>Number.isInteger(i)&&i>=0&&i<6000));
+    const used=[];
+    for(const s of data.levels){
+      if(!Array.isArray(s.ids)||s.ids.length!==15||!s.ids.every(i=>Number.isInteger(i)&&i>=0&&i<6000))return false;
+      used.push(...s.ids);
+    }
+    return used.length===6000&&new Set(used).size===6000;
   }
   async function json(path){
     const response=await fetch(API+path,{headers:{Accept:'application/json'}});
