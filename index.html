@@ -514,6 +514,6 @@ renderHome();
 if(!S.name){$('welcome').classList.add('on')}
 setTimeout(()=>{const c=$('lv'+unlocked());if(c&&unlocked()>7)c.scrollIntoView({block:'center'})},200);
 </script>
-<script>if("serviceWorker"in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script>
+<script>if("serviceWorker"in navigator)window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){r.update()}).catch(function(){})});</script>
 </body>
 </html>
