@@ -339,7 +339,7 @@ function renderRound(){
   const ids=G.ids;
   G.matched=new Set();G.sel={en:null,fa:null};G.lock=false;
   const en=$('cEn'),fc=$('cFa');en.innerHTML='';fc.innerHTML='';
-  shuffle([...ids]).forEach((id,k)=>{const w=W[id],b=document.createElement('button');b.className='card glass en';b.dataset.id=id;b.style.animationDelay=k*.06+'s';b.innerHTML=`<span class="emo">${w[3]}</span><span class="tx"><span class="t">${w[0]}</span><span class="p">${w[2]}</span></span>`;b.onclick=()=>pick('en',b);en.appendChild(b)});
+  shuffle([...ids]).forEach((id,k)=>{const w=W[id],b=document.createElement('button');b.className='card glass en';b.dataset.id=id;b.style.animationDelay=k*.06+'s';b.innerHTML=`<span class="emo">${w[3]}</span><span class="tx"><span class="t">${w[0]}</span>${w[2]?`<span class="p">${w[2]}</span>`:""}</span>`;b.onclick=()=>pick('en',b);en.appendChild(b)});
   shuffle([...ids]).forEach((id,k)=>{const b=document.createElement('button');b.className='card glass fa';b.dataset.id=id;b.style.animationDelay=(k*.06+.1)+'s';b.innerHTML=`<span class="t">${W[id][1]}</span>`;b.onclick=()=>pick('fa',b);fc.appendChild(b)});
   const bd=$('board');bd.classList.remove('slide');void bd.offsetWidth;bd.classList.add('slide');
   $('hint').textContent=fa(PER)+' لغت را به معنی‌اش وصل کن — برای دیدن بقیه به پایین برو ⬇️';$('board').scrollTop=0;
