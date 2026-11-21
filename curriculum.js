@@ -52,7 +52,7 @@
         const translations=Array.isArray(item.translations)?item.translations:[];
         const tr=translations.find(x=>x&&typeof x.meaning==='string'&&x.meaning.trim());
         if(!tr)continue;
-        const meaning=tr.meaning.trim().replace(/\s+/g,' ').replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[ch]));
+        const meaning=tr.meaning.trim().replace(/\s+/g,' ').replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
         if(meaning.length>90)continue;
         seen.add(english);
         pool.push([english,meaning,'',EMOJI[cat.slug]||'📘']);
