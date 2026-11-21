@@ -216,7 +216,7 @@ setTimeout(function(){var m=document.getElementById('map');if(m&&!m.children.len
   <div class="toast" id="toast"></div>
   <!-- SETTINGS -->
   <div class="sheet" id="sheet"><div class="panel">
-    <div class="row"><span>👤 نام بازیکن</span><button class="btn" id="changeName" style="width:auto;margin:0;padding:8px 14px">تغییر نام</button></div>
+    <div class="row"><span>👤 نام بازیکن</span><button class="iconbtn glass" id="changeName" style="width:38px;height:38px;margin:0" aria-label="تغییر نام" title="تغییر نام">✏️</button></div>
     <div class="row"><span>🔊 افکت صوتی</span><div class="sw on" id="swSound"></div></div>
     <div class="row"><span>🗣️ تلفظ انگلیسی با صدا</span><div class="sw on" id="swVoice"></div></div>
     <div class="row"><span>📳 لرزش</span><div class="sw on" id="swVib"></div></div>
@@ -329,7 +329,7 @@ function renderHome(){
   $('ring').style.setProperty('--p',pct);$('ringTx').textContent=fa(pct)+'٪';
   $('heroT').textContent=doneN?'آفرین، ادامه بده!':'شروع یادگیری';
   $('welcomeName').textContent=S.name?'خوش اومدی '+S.name+' عزیز! 🌟':'';
-  $('heroP').textContent=fa(doneN)+' مرحله از '+fa(TOTAL)+' کامل شده. ۵۰ مرحلهٔ اول رایگان است؛ هر مرحله '+fa(PER)+' لغت دارد.';
+  $('heroP').textContent=fa(doneN)+' از '+fa(TOTAL)+' مرحله تکمیل شده. ۵۰ مرحلهٔ اول رایگان است؛ هر مرحله '+fa(PER)+' لغت دارد.';
   $('playBtn').textContent=(doneN?'▶ ادامه: مرحلهٔ ':'▶ شروع: مرحلهٔ ')+fa(top+1);
   let h='<h4>مسیر یادگیری تو</h4><div class="grid">';
   for(let L=0;L<TOTAL;L++){
@@ -426,7 +426,7 @@ function cloudMessage(t){$('cloudStatus').textContent=t}
 function openCloud(){ $('cloudModal').classList.add('on'); $('cloudPassword').value=''; }
 function closeCloud(){ $('cloudModal').classList.remove('on'); }
 function cloudRefreshButton(){
-  $('cloudAccount').textContent=cloudUser?'حساب متصل ✓':'ورود / ثبت‌نام';
+  $('cloudAccount').textContent=cloudUser?'پروفایل من':'ورود / ثبت‌نام';
   $('cloudLogout').style.display=cloudUser?'block':'none';
   if(cloudUser) cloudMessage('وارد شدی: '+cloudUser.email+' — پیشرفتت همگام می‌شود.');
 }
